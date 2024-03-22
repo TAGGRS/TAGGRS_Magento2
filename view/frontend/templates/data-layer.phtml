@@ -1,0 +1,14 @@
+<?php /** @var \Taggrs\DataLayer\Block\DataLayer $block */
+$dataLayer = $block->getDataLayer();
+?>
+<pre>
+    <?php print_r($dataLayer); ?>
+</pre>
+<script>
+    (function () {
+        document.addEventListener('DOMContentLoaded', () => {
+            const dataLayer = <?php echo json_encode($dataLayer); ?>;
+            taggrsPush(dataLayer, true);
+        });
+    })();
+</script>

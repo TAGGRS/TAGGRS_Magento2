@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="taggrs" translate="label" sortOrder="10">
+            <label>TAGGRS</label>
+        </tab>
+        <section id="taggrs_datalayer" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Data Layer</label>
+            <tab>taggrs</tab>
+            <resource>Taggrs_DataLayer::datalayer_config</resource>
+            <group id="gtm" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Google Tag Manager Settings</label>
+                <field id="gtm_code" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Google Tag Manager Code</label>
+                    <comment>You can fill in your Google Tag Manager web container ID.</comment>
+                </field>
+                <field id="api_secret" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Measurement API secret</label>
+                </field>
+                <field id="subdomain" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Subdomain for Enhanced Tracking Script</label>
+                    <comment>If you do not want to use the Enhanced Tracking Script, leave this field empty</comment>
+                </field>
+            </group>
+
+            <group id="events" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Events</label>
+                <field id="view_item_list" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>View item list</label>
+                </field>
+                <field id="view_item" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>View item</label>
+                </field>
+                <field id="view_cart" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>View cart</label>
+                </field>
+                <field id="select_promotion" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Select promotion</label>
+                </field>
+                <field id="remove_from_cart" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Remove from cart</label>
+                </field>
+                <field id="purchase" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Purchase</label>
+                </field>
+                <field id="begin_checkout" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Begin checkout</label>
+                </field>
+                <field id="add_to_cart" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Add to cart</label>
+                </field>
+                <field id="add_shipment_info" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Add shipment info</label>
+                </field>
+                <field id="add_purchase_info" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Add purchase info</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

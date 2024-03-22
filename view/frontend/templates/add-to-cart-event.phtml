@@ -1,0 +1,12 @@
+<?php /** @var \Magento\Framework\View\Element\Template $block */ ?>
+
+<script>
+    require(['jquery'], function ($) {
+
+        $(document).on('ajax:addToCart', function (event, data) {
+            taggrsAjaxEvent('addtocart').then(() => {
+                taggrsReloadQuoteData();
+            });
+        });
+    });
+</script>

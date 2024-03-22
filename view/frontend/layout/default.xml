@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+
+        <referenceBlock name="head.additional">
+            <block name="taggrs.data-layer.gtag"
+                   class="Taggrs\DataLayer\Block\Gtag"
+                   template="Taggrs_DataLayer::gtag.phtml"
+            />
+        </referenceBlock>
+
+        <referenceContainer name="before.body.end">
+
+            <block name="taggrs.data-layer.session"
+                   class="Taggrs\DataLayer\Block\SessionDataLayer"
+                   template="Taggrs_DataLayer::data-layer.phtml"
+            />
+
+            <block name="taggrs.data-layer.ajax.add_to_cart"
+                   ifconfig="taggrs_datalayer/events/add_to_cart"
+                   class="Magento\Framework\View\Element\Template"
+                   template="Taggrs_DataLayer::add-to-cart-event.phtml"
+            />
+
+        </referenceContainer>
+    </body>
+</page>

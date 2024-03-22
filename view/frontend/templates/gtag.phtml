@@ -1,0 +1,94 @@
+<?php
+/** @var \Taggrs\DataLayer\Block\Gtag $block */
+?>
+<?php if (!empty($block->getGtmCode())): ?>
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','<?php echo $block->getGtmCode(); ?>');
+    </script>
+<?php endif; ?>
+<script>
+
+    window.taggrsQuoteData = {};
+    window.taggrsCurrency = '<?php echo $block->getCurrency() ?>';
+    window.taggersEventsConfig = <?php echo $block->getAjaxEventsConfig(); ?>
+
+    document.addEventListener('DOMContentLoaded', () => {
+        taggrsReloadQuoteData();
+    })
+
+    function taggrsReloadQuoteData() {
+        return fetch('<?php echo $block->getUrl('taggrs-datalayer/getquotedata')  ?>')
+            .then(response => {
+            if (!response.ok) console.warn('GET request failed');
+            return response.json()
+        })
+            .then(data => {
+                window.taggrsQuoteData = data;
+            })
+    }
+
+    function taggrsLoadUserData(callback) {
+        return fetch('<?php echo $block->getUrl('taggrs-datalayer/getuserdata')  ?>')
+            .then(response => {
+                if (!response.ok) console.warn('GET request failed');
+                return response.json()
+            })
+            .then(data => {
+                window.taggrsUserData = data;
+                if (typeof  callback === 'function') {
+                    callback(data);
+                }
+            })
+    }
+
+
+    function taggrsPush(dataLayer, reloadUserData) {
+
+        if (!dataLayer.hasOwnProperty('ecommerce')) {
+            return;
+        }
+
+        window.dataLayer = window.dataLayer || [];
+
+        const userDataEmpty = !dataLayer.hasOwnProperty('user_data')
+            || !dataLayer.user_data.hasOwnProperty('email')
+
+        if (userDataEmpty) {
+            taggrsLoadUserData((data) => {
+                dataLayer.user_data = data;
+                window.dataLayer.push(dataLayer);
+                console.log(dataLayer);
+            });
+        } else {
+            window.dataLayer.push(dataLayer);
+            console.log(dataLayer);
+        }
+
+
+    }
+
+    function taggrsAjaxEvent(eventName, callback) {
+
+        const ajaxBaseUrl = '<?php echo $block->getUrl('taggrs-datalayer')  ?>';
+
+        return fetch(ajaxBaseUrl + eventName)
+            .then(response => {
+                if (!response.ok) console.warn('GET request failed');
+                return response.json()
+            })
+            .then(data => {
+                taggrsPush(data, false);
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        ;
+    }
+</script>

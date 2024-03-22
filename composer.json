@@ -1,0 +1,25 @@
+{
+    "name": "taggrs/data-layer",
+    "description": "N/A",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "alexwestergaard/php-ga4": "^1.1.8"
+    },
+    "version": "1.0.0",
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Taggrs\\DataLayer\\": ""
+        }
+    }
+}
+
