@@ -48,6 +48,7 @@ class SearchResultsViewItemList extends DataLayer
             'item_list_id' => 'search_results',
             'item_list_name' => 'Search Results for "'. $query .'"',
             'items' => $items,
+            'user_data' => $this->getUserData(),
         ];
     }
 }

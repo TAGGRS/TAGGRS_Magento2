@@ -43,11 +43,12 @@ class Purchase extends DataLayer
         return [
             'transaction_id' => $order->getIncrementId(),
             'currency' => $this->_storeManager->getStore()->getCurrentCurrency()->getCode(),
-            'value' => $order->getGrandTotal(),
-            'tax' => $order->getTaxAmount(),
-            'shipping' => $order->getShippingAmount(),
-            'coupon' => $order->getCouponCode(),
+            'value' => (float)$order->getGrandTotal(),
+            'tax' => (float)$order->getTaxAmount(),
+            'shipping' => (float)$order->getShippingAmount(),
+//            'coupon' => $order->getCouponCode(),
             'items' => $this->productHelper->getItemsFromOrder($order),
+            'user_data' => $this->getUserData()
         ];
     }
 
@@ -61,23 +62,23 @@ class Purchase extends DataLayer
         $userData['email'] = $billingAddress->getEmail();
         $userData['email_hashed'] = hash('sha256', $billingAddress->getEmail());
 
-        $userData['first_name'] = $billingAddress->getFirstname();
-        $userData['last_name'] = $billingAddress->getLastname();
 
-        $street = $billingAddress->getStreet();
-
-        if (isset($street[0])) {
-            $userData['address_1'] = $street[0];
-        }
-        if (isset($street[0])) {
-            $userData['address_2'] = $street[1];
-        }
-
-        $userData['city'] = $billingAddress->getCity();
-        $userData['postcode'] = $billingAddress->getPostcode();
-        $userData['country'] = $billingAddress->getCountryId();
         $userData['phone'] = $billingAddress->getTelephone();
         $userData['phone_hashed'] = hash('sha256', $billingAddress->getTelephone());
+
+        $address = [];
+
+        $address['first_name'] = $billingAddress->getFirstname();
+        $address['last_name'] = $billingAddress->getLastname();
+        $street = $billingAddress->getStreet();
+
+        $address['street'] = implode(' ', $street);
+
+        $address['city'] = $billingAddress->getCity();
+        $address['postcode'] = $billingAddress->getPostcode();
+        $address['country'] = $billingAddress->getCountryId();
+
+        $userData['address'] = $address;
 
         return $userData;
     }

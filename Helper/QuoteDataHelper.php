@@ -2,7 +2,9 @@
 
 namespace Taggrs\DataLayer\Helper;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
@@ -11,7 +13,7 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\SalesRule\Api\Data\CouponInterface;
 use Magento\SalesRule\Model\CouponFactory;
 
-class QuoteDataHelper
+class QuoteDataHelper extends AbstractHelper
 {
     private Session $checkoutSession;
 
@@ -19,26 +21,38 @@ class QuoteDataHelper
 
     private CouponFactory $couponFactory;
 
+    private ProductRepositoryInterface $productRepository;
+
     /**
      * @param Session $checkoutSession
      * @param Escaper $escaper
      * @param CouponFactory $couponFactory
      */
-    public function __construct(Session $checkoutSession, Escaper $escaper, CouponFactory $couponFactory)
+    public function __construct(
+        Session $checkoutSession,
+        Escaper $escaper,
+        CouponFactory $couponFactory,
+        CategoryRepositoryInterface $categoryRepository,
+        ProductRepositoryInterface $productRepository
+    )
     {
         $this->checkoutSession = $checkoutSession;
         $this->escaper = $escaper;
         $this->couponFactory = $couponFactory;
+        $this->productRepository = $productRepository;
+
+        parent::__construct($categoryRepository);
     }
 
     public function getItemByProduct( ProductInterface $product ): array
     {
-        return [
+        $item = [
             'item_id' => $product->getId(),
-            'item_name' => $this->escaper->escapeJs($product->getName()),
+            'item_name' => $product->getName(),
             'price' => $product->getTypeId() !== 'configurable' ? $product->getPrice() : $product->getFinalPrice(),
-            'item_category' => implode(',', $product->getCategoryIds() )
         ];
+
+        return array_merge($item, $this->getCategoryNamesByProduct($product));
     }
 
     public function getItemsFromQuote(bool $includeDiscount = false, bool $includeCouponCode = false): array
@@ -47,17 +61,28 @@ class QuoteDataHelper
 
         $items = [];
         foreach ($quoteItems as $quoteItem) {
-            $item = $this->getItemByProduct($quoteItem->getProduct());
-            $item['price'] = $quoteItem->getPriceInclTax();
+            if ($quoteItem->getProduct()->getTypeId() === 'configurable') {
+                $configProduct = $this->productRepository->getById($quoteItem->getProduct()->getId());
+                $item['item_id'] = $configProduct->getSku();
+                $item['item_variant'] = $quoteItem->getSku();
+            } else {
+                $item['item_id'] = $quoteItem->getSku();
+            }
+
+            $item['item_name'] = $quoteItem->getName();
+            $item['price'] = (float)$quoteItem->getPriceInclTax();
+//            $item['item_category'] = implode(',', $quoteItem->getProduct()->getCategoryIds() );
             $item['quantity'] = $quoteItem->getQty();
 
             if ($includeDiscount) {
                 $item['discount'] = $quoteItem->getDiscountAmount();
             }
 
-            if ($includeCouponCode) {
+            if ($quoteItem->getQuote()->getCouponCode()) {
                 $item['coupon'] = $quoteItem->getQuote()->getCouponCode();
             }
+
+            $item = array_merge($item, $this->getCategoryNamesByProduct($quoteItem->getProduct()));
 
             $items[] = $item;
 
@@ -72,12 +97,23 @@ class QuoteDataHelper
             $quote = $this->checkoutSession->getQuote();
             $data = [];
             foreach ($quote->getAllVisibleItems() as $quoteItem) {
-                $data[$quoteItem->getId()] = [
-                    'item_id' => $quoteItem->getProduct()->getId(),
-                    'item_name' => $this->escaper->escapeJs($quoteItem->getProduct()->getName()),
+                $item = [
+                    'item_id' => $quoteItem->getSku(),
+                    'item_name' => $quoteItem->getName(),
                     'price' => floatval($quoteItem->getPriceInclTax()),
-                    'quantity' => $quoteItem->getQty()
+                    'quantity' => $quoteItem->getQty(),
                 ];
+
+                if ($quoteItem->getProduct()->getTypeId() === 'configurable') {
+                    $configProduct = $this->productRepository->getById($quoteItem->getProduct()->getId());
+                    $item['item_id'] = $configProduct->getSku();
+                    $item['item_variant'] = $quoteItem->getSku();
+                } else {
+                    $item['item_id'] = $quoteItem->getSku();
+                }
+
+                $item = array_merge($item, $this->getCategoryNamesByProduct($quoteItem->getProduct()));
+                $data[$quoteItem->getItemId()] = $item;
             }
             return $data;
         } catch (NoSuchEntityException $e) {

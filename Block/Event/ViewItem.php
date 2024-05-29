@@ -8,6 +8,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\Template;
 use Taggrs\DataLayer\Block\DataLayer;
+use Taggrs\DataLayer\Helper\ProductHelper;
 use Taggrs\DataLayer\Helper\UserDataHelper;
 
 class ViewItem extends DataLayer
@@ -17,6 +18,7 @@ class ViewItem extends DataLayer
 
     private ProductRepositoryInterface $productRepository;
 
+    private ProductHelper $productHelper;
 
     /**
      * @param RequestInterface $request
@@ -27,12 +29,14 @@ class ViewItem extends DataLayer
         ProductRepositoryInterface $productRepository,
         UserDataHelper $userDataHelper,
         Template\Context $context,
+        ProductHelper $productHelper,
         array $data = []
     ) {
         parent::__construct( $userDataHelper, $context, $data );
 
         $this->request           = $request;
         $this->productRepository = $productRepository;
+        $this->productHelper     = $productHelper;
     }
 
 
@@ -51,17 +55,21 @@ class ViewItem extends DataLayer
             ->getCode()
         ;
 
-        $price = $product->getFinalPrice();
+        $price = (float)$product->getFinalPrice();
+
+        $item = [
+            'item_id' => $product->getSku(),
+            'item_name' => $product->getName(),
+            'price' => $price,
+        ];
+
+        $item = array_merge($item, $this->productHelper->getCategoryNamesByProduct($product));
 
         return [
             'currency' => $currency,
             'value' => $price,
-            'items' => [[
-                'item_id' => $product->getId(),
-                'item_name' => $this->_escaper->escapeJs($product->getName()),
-                'price' => $price,
-                'item_category' => implode(',', $product->getCategoryIds()),
-            ]]
+            'items' => [$item],
+            'user_data' => $this->getUserData(),
         ];
     }
 

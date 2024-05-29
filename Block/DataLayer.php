@@ -34,7 +34,6 @@ abstract class DataLayer extends Template implements DataLayerInterface
         return [
             'event' => $this->getEvent(),
             'ecommerce' => $this->getEcommerce(),
-            'user_data' => $this->getUserData(),
         ];
     }
 

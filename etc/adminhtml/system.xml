@@ -18,9 +18,8 @@
                 <field id="api_secret" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Measurement API secret</label>
                 </field>
-                <field id="subdomain" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Subdomain for Enhanced Tracking Script</label>
-                    <comment>If you do not want to use the Enhanced Tracking Script, leave this field empty</comment>
+                <field id="api_measurement_id" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Measurement API - Measurement ID</label>
                 </field>
             </group>
 
@@ -50,6 +49,12 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <label>Purchase</label>
                 </field>
+                <field id="purchase_via_measurement_api" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <label>Purchase via Measurements API</label>
+                    <comment>With this connection, you shoot purchase data from Magento to GA4. By default, this is not compliant with Google Consent Mode V2</comment>
+
+                </field>
                 <field id="begin_checkout" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <label>Begin checkout</label>
@@ -62,9 +67,9 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <label>Add shipment info</label>
                 </field>
-                <field id="add_purchase_info" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="add_payment_info" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <label>Add purchase info</label>
+                    <label>Add payment info</label>
                 </field>
             </group>
         </section>

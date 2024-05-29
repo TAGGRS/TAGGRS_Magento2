@@ -41,16 +41,14 @@ class BeginCheckout extends DataLayer
             ->getCode()
         ;
 
-        $total = $this->quoteDataHelper->getQuote()->getGrandTotal();
-        $couponCode = $this->quoteDataHelper->getQuote()->getCouponCode();
-
+        $total = (float)$this->quoteDataHelper->getQuote()->getGrandTotal();
         $items = $this->quoteDataHelper->getItemsFromQuote();
+
         return [
             'currency' => $currency,
             'value' => $total,
-            'coupon' => $couponCode,
-            'items' => $items
+            'items' => $items,
+            'user_data' => $this->getUserData(),
         ];
-        // TODO: Implement getEcommerce() method.
     }
 }

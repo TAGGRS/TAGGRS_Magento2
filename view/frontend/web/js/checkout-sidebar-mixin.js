@@ -7,11 +7,12 @@ define([
         return $.widget('mage.sidebar', $.mage.sidebar, {
             _removeItem: function (elem) {
 
-                if (window.taggersEventsConfig.remove_from_cart) {
+                if (window.taggersEventsConfig.remove_from_cart !== true) {
                     return this._super(elem);
                 }
 
                 const quoteItemId = $(elem).data('cart-item');
+                console.log(window.taggrsQuoteData);
                 if (window.taggrsQuoteData.hasOwnProperty(quoteItemId)) {
                     const quoteItem = window.taggrsQuoteData[quoteItemId];
                     const dataLayer = {event: 'remove_from_cart'};
@@ -20,7 +21,6 @@ define([
                         value: quoteItem.price,
                         items: [quoteItem]
                     };
-                    // console.log('test remove item', dataLayer);
                     taggrsPush(dataLayer, true);
                 }
 

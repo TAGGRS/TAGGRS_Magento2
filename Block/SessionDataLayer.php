@@ -39,7 +39,6 @@ class SessionDataLayer extends DataLayer
         return json_encode($this->getDataLayer());
     }
 
-
     public function getEvent(): string
     {
         return '';

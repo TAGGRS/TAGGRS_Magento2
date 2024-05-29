@@ -49,8 +49,9 @@ class CategoryViewItemList extends DataLayer
 
         return [
             'item_list_id' => $category->getId(),
-            'item_list_name' => $this->_escaper->escapeJs($category->getName()),
+            'item_list_name' => $category->getName(),
             'items' => $items,
+            'user_data' => $this->getUserData(),
         ];
     }
 }

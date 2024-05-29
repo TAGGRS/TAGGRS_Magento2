@@ -52,9 +52,11 @@ class ViewCart extends DataLayer
 
         return [
             'currency' => $currency,
-            'value' => $this->checkoutSession->getQuote()->getGrandTotal(),
-            'items' => $items
+            'value' => (float)$this->checkoutSession->getQuote()->getGrandTotal(),
+            'coupon' => $this->quoteDataHelper->getQuote()->getCouponCode() ?? null,
+            'items' => $items,
+            'user_data' => $this->getUserData()
         ];
-        // TODO: Implement getEcommerce() method.
     }
+
 }

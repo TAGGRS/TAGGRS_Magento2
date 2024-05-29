@@ -27,7 +27,6 @@ abstract class DataLayer implements DataLayerInterface
         return [
             'event' => $this->getEvent(),
             'ecommerce' => $this->getEcommerce(),
-            'user_data' => $this->getUserData(),
         ];
     }
 }

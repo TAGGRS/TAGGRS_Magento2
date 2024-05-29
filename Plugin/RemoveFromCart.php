@@ -83,17 +83,20 @@ class RemoveFromCart implements DataLayerInterface
 
         if ($this->removedItem !== null) {
 
-            $ecommerce['value'] = floatval($this->removedItem->getPriceInclTax());
+            $ecommerce['value'] = floatval($this->removedItem->getPriceInclTax()) * $this->removedItem->getQty();
 
             $item = [
                 'item_id' => $this->removedItem->getProduct()->getId(),
                 'item_name' => $this->removedItem->getProduct()->getName(),
-                'item_category' => implode(',', $this->removedItem->getProduct()->getCategoryIds()),
                 'quantity' => $this->removedItem->getQty(),
                 'price' => floatval($this->removedItem->getPriceInclTax()),
             ];
 
+            $item = array_merge($item, $this->productDataHelper->getCategoryNamesByProduct($this->removedItem->getProduct()));
+
             $ecommerce['items'] = [$item];
+
+            $ecommerce['user_data'] = $this->getUserData();
         }
 
         return $ecommerce;
@@ -109,7 +112,7 @@ class RemoveFromCart implements DataLayerInterface
         return [
             'event' => $this->getEvent(),
             'ecommerce' => $this->getEcommerce(),
-            'user_data' => $this->getUserData(),
+
         ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Taggrs\DataLayer\Controller\SelectPromotion;
+namespace Taggrs\DataLayer\Controller\AddPaymentInfo;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -13,41 +13,34 @@ class Index extends AbstractDataLayerController
 {
     private QuoteDataHelper $quoteDataHelper;
 
-
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
         QuoteDataHelper $quoteDataHelper,
         UserDataHelper $userDataHelper,
-        StoreManagerInterface $storeManager,
+        StoreManagerInterface $storeManager
     )
     {
         parent::__construct($context, $resultJsonFactory, $userDataHelper, $storeManager);
 
         $this->quoteDataHelper = $quoteDataHelper;
+        $this->storeManager = $storeManager;
     }
 
     public function getEvent(): string
     {
-        return 'select_promotion';
+        return 'add_payment_info';
     }
 
     public function getEcommerce(): array
     {
-        $ecommerce = [
+        $total = $this->quoteDataHelper->getQuote()->getGrandTotal();
+
+        return [
             'currency' => $this->getCurrency(),
-            'items' => $this->quoteDataHelper->getItemsFromQuote(true, true)
+            'value' => $total,
+            'items' => $this->quoteDataHelper->getItemsFromQuote(true, true),
+            'user_data' => $this->getUserData(),
         ];
-
-        $coupon = $this->quoteDataHelper->getCouponFromQuote();
-
-        if ($coupon !== null) {
-            $ecommerce['promotion_id'] = $coupon->getCouponId();
-            $ecommerce['promotion_name'] = $coupon->getCode();
-        }
-
-        $ecommerce['user_data'] = $this->getUserData();
-
-        return $ecommerce;
     }
 }

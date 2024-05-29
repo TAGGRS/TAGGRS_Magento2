@@ -15,7 +15,6 @@ class Index extends AbstractDataLayerController
 {
     private Session $checkoutSession;
 
-    private StoreManagerInterface $storeManager;
 
     public function __construct(
         Context $context,
@@ -25,7 +24,7 @@ class Index extends AbstractDataLayerController
         UserDataHelper $userDataHelper
     )
     {
-        parent::__construct($context, $resultJsonFactory, $userDataHelper);
+        parent::__construct($context, $resultJsonFactory, $userDataHelper, $storeManager);
 
         $this->checkoutSession = $checkoutSession;
         $this->storeManager = $storeManager;
@@ -44,21 +43,26 @@ class Index extends AbstractDataLayerController
 
         $ecommerce = [
             'items' => [],
-            'currency' => $this->storeManager->getStore()->getCurrentCurrency()->getCode()
+            'currency' => $this->getCurrency()
         ];
         foreach ($quote->getAllVisibleItems() as $quoteItem) {
+
             if ($quoteItem->getId() == $quoteItemId) {
-                $ecommerce['value'] = floatval($quoteItem->getPriceInclTax());;
+                $ecommerce['value'] = floatval($quoteItem->getPriceInclTax()) * $quoteItem->getQty();
                 $item = [];
                 $item['item_id'] = $quoteItem->getProduct()->getId();
                 $item['item_name'] = $quoteItem->getProduct()->getName();
                 $item['item_category'] = implode(',', $quoteItem->getProduct()->getCategoryIds());
                 $item['price'] = floatval($quoteItem->getPriceInclTax());
                 $item['quantity'] = $quoteItem->getQty();
-                $ecommerce['items'] = $item;
+
+                $ecommerce['items'] = [$item];
                 break;
             }
         }
+
+        $ecommerce['user_data'] = $this->getUserData();
+
         return $ecommerce;
     }
 }

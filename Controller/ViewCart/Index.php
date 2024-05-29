@@ -1,6 +1,6 @@
 <?php
 
-namespace Taggrs\DataLayer\Controller\AddToCart;
+namespace Taggrs\DataLayer\Controller\ViewCart;
 
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
@@ -36,16 +36,28 @@ class Index extends AbstractDataLayerController
 
     public function getEvent(): string
     {
-        return 'add_to_cart';
+        return 'view_cart';
     }
 
     public function getEcommerce(): array
     {
+        try {
+            $quote = $this->checkoutSession->getQuote();
+        } catch (NoSuchEntityException|LocalizedException $e) {
+        }
+
+        if (!isset($quote)) {
+            return [];
+        }
+
+        $items = $this->quoteDataHelper->getItemsFromQuote();
+
 
         return [
             'currency' => $this->getCurrency(),
+            'coupon' => $this->quoteDataHelper->getQuote()->getCouponCode() ?? null,
             'value' => (float)$this->checkoutSession->getQuote()->getGrandTotal(),
-            'items' => $this->quoteDataHelper->getItemsFromQuote(),
+            'items' => $items,
             'user_data' => $this->getUserData(),
         ];
     }

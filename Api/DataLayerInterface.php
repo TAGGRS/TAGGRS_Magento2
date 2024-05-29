@@ -11,4 +11,5 @@ interface DataLayerInterface
     public function getUserData(): array;
 
     public function getDataLayer(): array;
+
 }

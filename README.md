@@ -73,6 +73,8 @@ This event is triggered on the Checkout Cart page. Because the checkout pages ar
 
 The DataLayer is rendered in [Taggrs\DataLayer\Block\Event\ViewCart](Block/Event/ViewCart.php).
 
+view_cart is also triggered via AJAX if the header mini cart is opened. The AJAX DataLayer is rendered in [Taggrs\DataLayer\Controller\ViewCart\Index](Controller/ViewCart/Index.php).
+
 ### select_promotion
 This event is triggered when a customer applies a discount code. This can be on the Checkout Cart page or on the Checkout Payment page.
 
@@ -88,6 +90,17 @@ The DataLayer is built in [Taggrs\DataLayer\Controller\SelectPromotion\Index](Co
 
 ### begin_checkout
 This event is triggered on the Checkout Index page. This DataLayer is rendered in the backend in [Taggrs\DataLayer\Block\Event\BeginCheckout](Block/Event/BeginCheckout.php).
+
+### add_shipping_info
+This event is triggered on the Checkout Index page when a logged in customer selects his shipping address, or when a guest customer enters the postcode.
+
+The DataLayer is rendered in [Taggrs\Datalayer\Controller\AddShippingInfo\Index](Controller/AddShippingInfo/Index.php).
+
+### add_payment_info
+This event is triggered on the Checkout Index page when a customer selects a payment method.
+
+
+The DataLayer is rendered in [Taggrs\Datalayer\Controller\AddPaymentInfo\Index](Controller/AddPaymentInfo/Index.php).
 
 ### purchase
 This event is triggered on the Checkout Thank You page. Because in some cases customers will not see the Checkout Thank You page, it's also needed to push the DataLayer from the backend using the Google Measurements API.

@@ -8,5 +8,9 @@
                 taggrsReloadQuoteData();
             });
         });
+
+        $("[data-block=\"minicart\"]").on("dropdowndialogopen", function ( e ) {
+            taggrsAjaxEvent('viewcart', () => {}, 1);
+        });
     });
 </script>

@@ -18,9 +18,12 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         taggrsReloadQuoteData();
-    })
+    });
+
+    const eventTriggeredCounter = {};
 
     function taggrsReloadQuoteData() {
+
         return fetch('<?php echo $block->getUrl('taggrs-datalayer/getquotedata')  ?>')
             .then(response => {
             if (!response.ok) console.warn('GET request failed');
@@ -28,6 +31,7 @@
         })
             .then(data => {
                 window.taggrsQuoteData = data;
+                console.log('Quote data reloaded');
             })
     }
 
@@ -54,12 +58,16 @@
 
         window.dataLayer = window.dataLayer || [];
 
-        const userDataEmpty = !dataLayer.hasOwnProperty('user_data')
-            || !dataLayer.user_data.hasOwnProperty('email')
+        if (!dataLayer.hasOwnProperty('ecommerce')) {
+            dataLayer.ecommerce = {};
+        }
+
+        const userDataEmpty = !dataLayer.ecommerce.hasOwnProperty('user_data')
+            || !dataLayer.ecommerce.user_data.hasOwnProperty('email')
 
         if (userDataEmpty) {
             taggrsLoadUserData((data) => {
-                dataLayer.user_data = data;
+                dataLayer.ecommerce.user_data = data;
                 window.dataLayer.push(dataLayer);
                 console.log(dataLayer);
             });
@@ -71,7 +79,19 @@
 
     }
 
-    function taggrsAjaxEvent(eventName, callback) {
+    function taggrsAjaxEvent(eventName, callback, limit) {
+
+        if (typeof limit !== "undefined") {
+            if (eventTriggeredCounter.hasOwnProperty(eventName) && eventTriggeredCounter[eventName] >= limit ) {
+                return;
+            }
+
+            if (!eventTriggeredCounter.hasOwnProperty(eventName)) {
+                eventTriggeredCounter[eventName] = 1;
+            } else {
+                eventTriggeredCounter[eventName]++;
+            }
+        }
 
         const ajaxBaseUrl = '<?php echo $block->getUrl('taggrs-datalayer')  ?>';
 

@@ -30,9 +30,9 @@ abstract class DataLayer extends Template implements DataLayerInterface
     }
 
 
-    public function getDataLayer(): string
+    public function getDataLayer(): array
     {
-        return json_encode($this->getDataLayerArray());
+        return $this->getDataLayerArray();
     }
 
     public function getDataLayerArray(): array
@@ -40,7 +40,6 @@ abstract class DataLayer extends Template implements DataLayerInterface
         return [
             'event' => $this->getEvent(),
             'ecommerce' => $this->getEcommerce(),
-            'user_data' => $this->getUserData(),
         ];
     }
 

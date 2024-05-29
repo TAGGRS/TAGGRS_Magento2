@@ -11,18 +11,15 @@ abstract class ApiDataLayer implements DataLayerInterface
 {
     private ScopeConfigInterface $config;
 
-    private Curl $curl;
 
     /**
      * @param ScopeConfigInterface $config
      */
     public function __construct(
         ScopeConfigInterface $config,
-        Curl $curl
     )
     {
         $this->config = $config;
-        $this->curl = $curl;
     }
 
     protected function doRequest(): void
@@ -30,8 +27,10 @@ abstract class ApiDataLayer implements DataLayerInterface
         $measurementId = $this->config->getValue('taggrs_datalayer/gtm/gtm_code');
         $apiSecret = $this->config->getValue('taggrs_datalayer/gtm/api_secret');
 
-        $body = [
-            ''
-        ];
+        $analytics = Analytics::new(
+            $measurementId,
+            $apiSecret,
+            true
+        );
     }
 }

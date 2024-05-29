@@ -74,7 +74,7 @@ class SelectPromotion implements DataLayerInterface
         return [
             'event' => $this->getEvent(),
             'ecommerce' => $this->getEcommerce(),
-            'user_data' => $this->getUserData(),
+//            'user_data' => $this->getUserData(),
         ];
     }
 }

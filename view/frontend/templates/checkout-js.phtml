@@ -5,11 +5,7 @@
             'Magento_Checkout/js/model/quote'
         ],
         function (setCouponCode, coupon, quote) {
-            console.log(setCouponCode);
             setCouponCode.registerSuccessCallback((response) => {
-                console.log("GREAT SUCCESS!")
-                console.log(quote);
-                console.log(coupon.getCouponCode()._latestValue);
                 taggrsAjaxEvent('selectpromotion');
             });
         });
