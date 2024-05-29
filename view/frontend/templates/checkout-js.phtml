@@ -1,0 +1,12 @@
+<script>
+    require([
+            'Magento_SalesRule/js/action/set-coupon-code',
+            'Magento_SalesRule/js/model/coupon',
+            'Magento_Checkout/js/model/quote'
+        ],
+        function (setCouponCode, coupon, quote) {
+            setCouponCode.registerSuccessCallback((response) => {
+                taggrsAjaxEvent('selectpromotion');
+            });
+        });
+</script>
