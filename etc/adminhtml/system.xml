@@ -21,6 +21,11 @@
                 <field id="api_measurement_id" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Measurement API - Measurement ID</label>
                 </field>
+                <field id="debug_mode" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Debug mode</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Print DataLayer variable in console when event is triggered.</comment>
+                </field>
             </group>
 
             <group id="events" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">

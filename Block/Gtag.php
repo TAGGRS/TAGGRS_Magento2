@@ -10,6 +10,8 @@ class Gtag extends Template
 {
     private QuoteDataHelper $quoteDataHelper;
 
+    private ScopeConfigInterface $scopeConfig;
+
     /**
      * @param QuoteDataHelper $quoteDataHelper
      */
@@ -27,6 +29,12 @@ class Gtag extends Template
     public function getGtmCode(): ?string
     {
         return $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_code');
+    }
+
+    public function isDebugMode(): bool
+    {
+        return (bool)$this->_scopeConfig->getValue('taggrs_datalayer/gtm/debug_mode');
+
     }
 
     public function getQuoteData(): string

@@ -14,7 +14,9 @@
 
     window.taggrsQuoteData = {};
     window.taggrsCurrency = '<?php echo $block->getCurrency() ?>';
-    window.taggersEventsConfig = <?php echo $block->getAjaxEventsConfig(); ?>
+    window.taggersEventsConfig = <?php echo $block->getAjaxEventsConfig(); ?>;
+
+    window.taggrsDebugMode = <?php echo $block->isDebugMode() ? 'true' : 'false' ?>;
 
     document.addEventListener('DOMContentLoaded', () => {
         taggrsReloadQuoteData();
@@ -69,11 +71,15 @@
             taggrsLoadUserData((data) => {
                 dataLayer.ecommerce.user_data = data;
                 window.dataLayer.push(dataLayer);
-                console.log(dataLayer);
+                if (window.taggrsDebugMode) {
+                    console.log(dataLayer);
+                }
             });
         } else {
             window.dataLayer.push(dataLayer);
-            console.log(dataLayer);
+            if (window.taggrsDebugMode) {
+                console.log(dataLayer);
+            }
         }
 
 
