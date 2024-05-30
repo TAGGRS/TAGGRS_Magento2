@@ -25,7 +25,7 @@ class SelectPromotion implements DataLayerInterface
     public function __construct(
         Session $session,
         UserDataHelper $userDataHelper,
-        QuoteDataHelper $quoteDataHelper,
+        QuoteDataHelper $quoteDataHelper
     )
     {
         $this->session = $session;

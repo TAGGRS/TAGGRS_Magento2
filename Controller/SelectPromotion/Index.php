@@ -19,7 +19,7 @@ class Index extends AbstractDataLayerController
         JsonFactory $resultJsonFactory,
         QuoteDataHelper $quoteDataHelper,
         UserDataHelper $userDataHelper,
-        StoreManagerInterface $storeManager,
+        StoreManagerInterface $storeManager
     )
     {
         parent::__construct($context, $resultJsonFactory, $userDataHelper, $storeManager);
