@@ -4,6 +4,7 @@ namespace Taggrs\DataLayer\Block;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 use Taggrs\DataLayer\Helper\QuoteDataHelper;
 
 class Gtag extends Template
@@ -14,6 +15,8 @@ class Gtag extends Template
 
     /**
      * @param QuoteDataHelper $quoteDataHelper
+     * @param Context $context
+     * @param array $data
      */
     public function __construct(
         QuoteDataHelper $quoteDataHelper,
@@ -29,6 +32,15 @@ class Gtag extends Template
     public function getGtmCode(): ?string
     {
         return $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_code');
+    }
+
+    public function getGtmUrl(): string
+    {
+        if ($gtmUrl = $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_url')) {
+            return $gtmUrl;
+        }
+
+        return 'www.googletagmanager.com';
     }
 
     public function isDebugMode(): bool

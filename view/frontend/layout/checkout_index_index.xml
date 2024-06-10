@@ -9,13 +9,14 @@
 
     <body>
         <referenceContainer name="before.body.end">
-            <block name="taggrs.data-layer.view_cart"
+            <block name="taggrs.data-layer.begin_checkout"
                    ifconfig="taggrs_datalayer/events/begin_checkout"
                    class="Taggrs\DataLayer\Block\Event\BeginCheckout"
                    template="Taggrs_DataLayer::data-layer.phtml"
             />
 
             <block name="taggrs.data-layer.checkout_js"
+                   ifconfig="taggrs_datalayer/events/select_promotion"
                    class="Magento\Framework\View\Element\Template"
                    template="Taggrs_DataLayer::checkout-js.phtml"
             />

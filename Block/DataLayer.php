@@ -23,6 +23,15 @@ abstract class DataLayer extends Template implements DataLayerInterface
         $this->userDataHelper = $userDataHelper;
     }
 
+    public function getGtmUrl(): string
+    {
+        if ($gtmUrl = $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_url')) {
+            return $gtmUrl;
+        }
+
+        return 'www.googletagmanager.com';
+    }
+
 
     public function getDataLayerJson(): string
     {
