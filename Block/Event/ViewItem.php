@@ -2,7 +2,6 @@
 
 namespace Taggrs\DataLayer\Block\Event;
 
-
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\RequestInterface;
@@ -32,7 +31,7 @@ class ViewItem extends DataLayer
         ProductHelper $productHelper,
         array $data = []
     ) {
-        parent::__construct( $userDataHelper, $context, $data );
+        parent::__construct($userDataHelper, $context, $data);
 
         $this->request           = $request;
         $this->productRepository = $productRepository;
@@ -75,8 +74,8 @@ class ViewItem extends DataLayer
 
     private function getCurrentProduct(): ProductInterface
     {
-        $id = $this->request->getParam( 'id' );
+        $id = $this->request->getParam('id');
 
-        return $this->productRepository->getById( $id );
+        return $this->productRepository->getById($id);
     }
 }

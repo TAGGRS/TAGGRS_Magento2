@@ -4,7 +4,7 @@ $dataLayer = $block->getDataLayer();
 <script>
     (function () {
         document.addEventListener('DOMContentLoaded', () => {
-            const dataLayer = <?php echo json_encode($dataLayer); ?>;
+            const dataLayer = <?= json_encode($dataLayer); ?>;
             taggrsPush(dataLayer, true);
         });
     })();

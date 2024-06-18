@@ -21,9 +21,7 @@ class Purchase extends DataLayer
         UserDataHelper        $userDataHelper,
         Template\Context      $context,
         array                 $data = []
-
-    )
-    {
+    ) {
         parent::__construct($userDataHelper, $context, $data);
 
         $this->checkoutSession = $checkoutSession;

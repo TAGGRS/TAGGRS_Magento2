@@ -54,7 +54,7 @@ class PurchaseEvent implements ObserverInterface
         $this->checkoutSession = $checkoutSession;
     }
 
-    public function execute( Observer $observer )
+    public function execute(Observer $observer)
     {
         $logger = ObjectManager::getInstance()->get(LoggerInterface::class);
 

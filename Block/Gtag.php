@@ -22,8 +22,7 @@ class Gtag extends Template
         QuoteDataHelper $quoteDataHelper,
         Template\Context $context,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $data);
         $this->quoteDataHelper = $quoteDataHelper;
     }
@@ -46,7 +45,6 @@ class Gtag extends Template
     public function isDebugMode(): bool
     {
         return (bool)$this->_scopeConfig->getValue('taggrs_datalayer/gtm/debug_mode');
-
     }
 
     public function getQuoteData(): string
@@ -65,5 +63,4 @@ class Gtag extends Template
              'remove_from_cart' => (bool)$this->_scopeConfig->getValue('taggrs_datalayer/events/remove_from_cart'),
         ]);
     }
-
 }

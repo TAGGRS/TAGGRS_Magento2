@@ -2,8 +2,6 @@
 
 namespace Taggrs\DataLayer\Helper;
 
-
-
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\ObjectManager;

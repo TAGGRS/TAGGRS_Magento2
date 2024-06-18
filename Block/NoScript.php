@@ -22,5 +22,4 @@ class NoScript extends Template
     {
         return $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_code');
     }
-
 }

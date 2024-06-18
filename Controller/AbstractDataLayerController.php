@@ -25,8 +25,7 @@ abstract class AbstractDataLayerController extends DataLayer implements HttpGetA
         JsonFactory $resultFactory,
         UserDataHelper $userDataHelper,
         StoreManagerInterface $storeManager,
-    )
-    {
+    ) {
         parent::__construct($userDataHelper);
 
         $this->context = $context;

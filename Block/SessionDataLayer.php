@@ -6,7 +6,6 @@ use Magento\Customer\Model\Session;
 use Taggrs\DataLayer\Helper\UserDataHelper;
 use Magento\Framework\View\Element\Template;
 
-
 class SessionDataLayer extends DataLayer
 {
     private Session $session;
@@ -16,8 +15,7 @@ class SessionDataLayer extends DataLayer
         UserDataHelper   $userDataHelper,
         Template\Context $context,
         array            $data = []
-    )
-    {
+    ) {
         parent::__construct($userDataHelper, $context, $data);
 
         $this->session = $session;
@@ -48,6 +46,4 @@ class SessionDataLayer extends DataLayer
     {
         return [];
     }
-
-
 }
