@@ -92,7 +92,10 @@ class Index extends AbstractDataLayerController
         $item = array_merge($item, $this->quoteDataHelper->getCategoryNamesByProduct($lastItem->getProduct()));
 
         return [
-            'items' => [$item]
+            'value' => (float)$this->checkoutSession->getQuote()->getGrandTotal(),
+            'currency' => $this->getCurrency(),
+            'items' => [$item],
+            'user_data' => $this->getUserData(),
         ];
     }
 }
