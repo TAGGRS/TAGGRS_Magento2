@@ -16,7 +16,7 @@ abstract class ApiDataLayer implements DataLayerInterface
      * @param ScopeConfigInterface $config
      */
     public function __construct(
-        ScopeConfigInterface $config,
+        ScopeConfigInterface $config
     ) {
         $this->config = $config;
     }

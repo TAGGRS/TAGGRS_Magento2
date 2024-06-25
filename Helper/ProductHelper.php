@@ -32,7 +32,7 @@ class ProductHelper extends AbstractHelper
         ListProduct $listProduct,
         CheckoutSession $checkoutSession,
         ProductRepositoryInterface $productRepository,
-        CategoryRepositoryInterface $categoryRepository,
+        CategoryRepositoryInterface $categoryRepository
     ) {
         $this->escaper            = $escaper;
         $this->listProduct        = $listProduct;
