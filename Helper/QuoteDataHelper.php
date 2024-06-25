@@ -34,8 +34,7 @@ class QuoteDataHelper extends AbstractHelper
         CouponFactory $couponFactory,
         CategoryRepositoryInterface $categoryRepository,
         ProductRepositoryInterface $productRepository
-    )
-    {
+    ) {
         $this->checkoutSession = $checkoutSession;
         $this->escaper = $escaper;
         $this->couponFactory = $couponFactory;
@@ -44,7 +43,7 @@ class QuoteDataHelper extends AbstractHelper
         parent::__construct($categoryRepository);
     }
 
-    public function getItemByProduct( ProductInterface $product ): array
+    public function getItemByProduct(ProductInterface $product): array
     {
         $item = [
             'item_id' => $product->getId(),

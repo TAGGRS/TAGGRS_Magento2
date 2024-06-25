@@ -22,8 +22,7 @@ class ProductViewDataHelper extends AbstractHelper
         CheckoutSession $checkoutSession,
         ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository
-    )
-    {
+    ) {
         $this->listProduct = $listProduct;
         $this->productRepository = $productRepository;
 
@@ -35,7 +34,7 @@ class ProductViewDataHelper extends AbstractHelper
         return $this->listProduct->getLoadedProductCollection();
     }
 
-    public function getItemsByCollection( AbstractCollection $collection): array
+    public function getItemsByCollection(AbstractCollection $collection): array
     {
         $items = [];
 
@@ -47,7 +46,7 @@ class ProductViewDataHelper extends AbstractHelper
         return $items;
     }
 
-    public function getItemByProduct( ProductInterface $product ): array
+    public function getItemByProduct(ProductInterface $product): array
     {
         $item = [
             'item_id' => $product->getSku(),
@@ -89,6 +88,5 @@ class ProductViewDataHelper extends AbstractHelper
         }
 
         return $items;
-
     }
 }

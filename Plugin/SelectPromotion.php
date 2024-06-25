@@ -26,8 +26,7 @@ class SelectPromotion implements DataLayerInterface
         Session $session,
         UserDataHelper $userDataHelper,
         QuoteDataHelper $quoteDataHelper
-    )
-    {
+    ) {
         $this->session = $session;
         $this->userDataHelper = $userDataHelper;
         $this->quoteDataHelper = $quoteDataHelper;

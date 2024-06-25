@@ -2,7 +2,6 @@
 
 namespace Taggrs\DataLayer\Block\Event;
 
-
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\Template;
@@ -28,7 +27,7 @@ class CategoryViewItemList extends DataLayer
         Template\Context            $context,
         array                       $data = []
     ) {
-        parent::__construct( $userDataHelper, $context, $data );
+        parent::__construct($userDataHelper, $context, $data);
 
         $this->request            = $request;
         $this->productHelper = $productHelper;
@@ -43,7 +42,7 @@ class CategoryViewItemList extends DataLayer
 
     public function getEcommerce(): array
     {
-        $category = $this->categoryRepository->get( $this->request->getParam( 'id' ) );
+        $category = $this->categoryRepository->get($this->request->getParam('id'));
         $collection = $this->productHelper->getCurrentProductCollection();
         $items = $this->productHelper->getItemsByCollection($collection);
 

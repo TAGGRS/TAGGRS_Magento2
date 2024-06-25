@@ -19,8 +19,7 @@ class Index extends AbstractDataLayerController
         QuoteDataHelper $quoteDataHelper,
         UserDataHelper $userDataHelper,
         StoreManagerInterface $storeManager
-    )
-    {
+    ) {
         parent::__construct($context, $resultJsonFactory, $userDataHelper, $storeManager);
 
         $this->quoteDataHelper = $quoteDataHelper;

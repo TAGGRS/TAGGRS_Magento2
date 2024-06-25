@@ -15,6 +15,9 @@
                     <label>Google Tag Manager Code</label>
                     <comment>You can fill in your Google Tag Manager web container ID.</comment>
                 </field>
+                <field id="gtm_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Google Tag Manager URL</label>
+                </field>
                 <field id="api_secret" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Measurement API secret</label>
                 </field>

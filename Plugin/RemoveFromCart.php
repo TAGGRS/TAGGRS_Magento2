@@ -40,8 +40,7 @@ class RemoveFromCart implements DataLayerInterface
         CartItemRepositoryInterface $cartItemRepository,
         CheckoutSession             $checkoutSession,
         StoreManagerInterface       $storeManager
-    )
-    {
+    ) {
         $this->session = $session;
         $this->userDataHelper = $userDataHelper;
         $this->productDataHelper = $productDataHelper;
@@ -69,7 +68,6 @@ class RemoveFromCart implements DataLayerInterface
         if ($this->removedItem !== null) {
             $this->session->setDataLayer($this->getDataLayer());
         }
-
     }
 
     public function getEvent(): string

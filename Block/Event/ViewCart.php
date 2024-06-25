@@ -25,9 +25,7 @@ class ViewCart extends DataLayer
         UserDataHelper        $userDataHelper,
         Template\Context      $context,
         array                 $data = []
-
-    )
-    {
+    ) {
         parent::__construct($userDataHelper, $context, $data);
 
         $this->checkoutSession = $checkoutSession;
@@ -58,5 +56,4 @@ class ViewCart extends DataLayer
             'user_data' => $this->getUserData()
         ];
     }
-
 }

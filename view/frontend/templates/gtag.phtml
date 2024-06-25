@@ -6,17 +6,17 @@
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
                 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','<?php echo $block->getGtmCode(); ?>');
+            'https://<?= $block->getGtmUrl(); ?>/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','<?= $block->getGtmCode(); ?>');
     </script>
 <?php endif; ?>
 <script>
 
     window.taggrsQuoteData = {};
-    window.taggrsCurrency = '<?php echo $block->getCurrency() ?>';
-    window.taggersEventsConfig = <?php echo $block->getAjaxEventsConfig(); ?>;
+    window.taggrsCurrency = '<?= $block->getCurrency() ?>';
+    window.taggersEventsConfig = <?= $block->getAjaxEventsConfig(); ?>;
 
-    window.taggrsDebugMode = <?php echo $block->isDebugMode() ? 'true' : 'false' ?>;
+    window.taggrsDebugMode = <?= $block->isDebugMode() ? 'true' : 'false' ?>;
 
     document.addEventListener('DOMContentLoaded', () => {
         taggrsReloadQuoteData();
@@ -26,9 +26,11 @@
 
     function taggrsReloadQuoteData() {
 
-        return fetch('<?php echo $block->getUrl('taggrs-datalayer/getquotedata')  ?>')
+        return fetch('<?= $block->getUrl('taggrs-datalayer/getquotedata')  ?>')
             .then(response => {
-            if (!response.ok) console.warn('GET request failed');
+            if (!response.ok) {
+                console.warn('GET request failed');
+            }
             return response.json()
         })
             .then(data => {
@@ -38,9 +40,11 @@
     }
 
     function taggrsLoadUserData(callback) {
-        return fetch('<?php echo $block->getUrl('taggrs-datalayer/getuserdata')  ?>')
+        return fetch('<?= $block->getUrl('taggrs-datalayer/getuserdata')  ?>')
             .then(response => {
-                if (!response.ok) console.warn('GET request failed');
+                if (!response.ok) {
+                    console.warn('GET request failed');
+                }
                 return response.json()
             })
             .then(data => {
@@ -99,7 +103,7 @@
             }
         }
 
-        const ajaxBaseUrl = '<?php echo $block->getUrl('taggrs-datalayer')  ?>';
+        const ajaxBaseUrl = '<?= $block->getUrl('taggrs-datalayer')  ?>';
 
         return fetch(ajaxBaseUrl + eventName)
             .then(response => {

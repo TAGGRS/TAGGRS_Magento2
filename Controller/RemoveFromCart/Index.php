@@ -22,8 +22,7 @@ class Index extends AbstractDataLayerController
         Session $checkoutSession,
         StoreManagerInterface $storeManager,
         UserDataHelper $userDataHelper
-    )
-    {
+    ) {
         parent::__construct($context, $resultJsonFactory, $userDataHelper, $storeManager);
 
         $this->checkoutSession = $checkoutSession;

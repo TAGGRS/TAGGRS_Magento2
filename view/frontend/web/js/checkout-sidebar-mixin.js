@@ -12,7 +12,6 @@ define([
                 }
 
                 const quoteItemId = $(elem).data('cart-item');
-                console.log(window.taggrsQuoteData);
                 if (window.taggrsQuoteData.hasOwnProperty(quoteItemId)) {
                     const quoteItem = window.taggrsQuoteData[quoteItemId];
                     const dataLayer = {event: 'remove_from_cart'};

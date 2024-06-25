@@ -13,25 +13,25 @@ class AbstractHelper
     /**
      * @param CategoryRepositoryInterface $categoryRepository
      */
-    public function __construct( CategoryRepositoryInterface $categoryRepository )
+    public function __construct(CategoryRepositoryInterface $categoryRepository)
     {
         $this->categoryRepository = $categoryRepository;
     }
 
 
-    public function getCategoryNamesByProduct( ProductInterface $product ): array
+    public function getCategoryNamesByProduct(ProductInterface $product): array
     {
         $categories = [];
 
-        foreach ( $product->getCategoryIds() as $categoryId ) {
+        foreach ($product->getCategoryIds() as $categoryId) {
             try {
                 $key = 'item_category';
                 if (count($categories) > 0) {
                     $key .= count($categories) + 1;
                 }
-                $category     = $this->categoryRepository->get( $categoryId );
+                $category     = $this->categoryRepository->get($categoryId);
                 $categories[$key] = $category->getName();
-            } catch ( NoSuchEntityException $e ) {
+            } catch (NoSuchEntityException $e) {
             }
         }
 

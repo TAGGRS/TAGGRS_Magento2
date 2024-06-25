@@ -48,19 +48,19 @@ class ProductHelper extends AbstractHelper
         return $this->listProduct->getLoadedProductCollection();
     }
 
-    public function getItemsByCollection( AbstractCollection $collection )
+    public function getItemsByCollection(AbstractCollection $collection)
     {
         $items = [];
 
         /** @var ProductInterface $item */
-        foreach ( $collection->getItems() as $item ) {
-            $items[] = $this->getItemByProduct( $item );
+        foreach ($collection->getItems() as $item) {
+            $items[] = $this->getItemByProduct($item);
         }
 
         return $items;
     }
 
-    public function getItemByProduct( ProductInterface $product ): array
+    public function getItemByProduct(ProductInterface $product): array
     {
         $item = [
             'item_id'       => $product->getSku(),
@@ -77,8 +77,8 @@ class ProductHelper extends AbstractHelper
     {
         $quoteItems = $this->checkoutSession->getQuote()->getAllVisibleItems();
         $items      = [];
-        foreach ( $quoteItems as $quoteItem ) {
-            $item             = $this->getItemByProduct( $quoteItem->getProduct() );
+        foreach ($quoteItems as $quoteItem) {
+            $item             = $this->getItemByProduct($quoteItem->getProduct());
             $item['item_id']  = $quoteItem->getSku();
             $item['price']    = $quoteItem->getPriceInclTax();
             $item['quantity'] = $quoteItem->getQty();
@@ -91,12 +91,12 @@ class ProductHelper extends AbstractHelper
         return $items;
     }
 
-    public function getItemsFromOrder( OrderInterface $order ): array
+    public function getItemsFromOrder(OrderInterface $order): array
     {
         $items = [];
-        foreach ( $order->getItems() as $orderItem ) {
-            $product          = $this->productRepository->getById( $orderItem->getProductId() );
-            $item             = $this->getItemByProduct( $product );
+        foreach ($order->getItems() as $orderItem) {
+            $product          = $this->productRepository->getById($orderItem->getProductId());
+            $item             = $this->getItemByProduct($product);
             $item['price']    = $orderItem->getPrice();
             $item['quantity'] = (int) $orderItem->getQtyOrdered();
 
@@ -104,6 +104,5 @@ class ProductHelper extends AbstractHelper
         }
 
         return $items;
-
     }
 }

@@ -15,6 +15,14 @@
             />
         </referenceBlock>
 
+        <referenceContainer name="after.body.start">
+            <block name="taggrs.data-layer.noscript"
+                   class="Taggrs\DataLayer\Block\NoScript"
+                   template="Taggrs_DataLayer::noscript.phtml"
+            />
+        </referenceContainer>
+
+
         <referenceContainer name="before.body.end">
 
             <block name="taggrs.data-layer.session"
