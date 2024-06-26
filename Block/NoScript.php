@@ -20,6 +20,8 @@ class NoScript extends Template
 
     public function getGtmCode(): ?string
     {
-        return $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_code');
+        $gtmCode = $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_code');
+
+        return is_string($gtmCode) ? trim($gtmCode) : null;
     }
 }

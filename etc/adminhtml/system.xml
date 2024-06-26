@@ -13,16 +13,20 @@
                 <label>Google Tag Manager Settings</label>
                 <field id="gtm_code" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Google Tag Manager Code</label>
-                    <comment>You can fill in your Google Tag Manager web container ID.</comment>
+                    <comment>Required: You can fill in your Google Tag Manager web container ID. Be careful there are no other GTM-tags present in the source code.</comment>
+                    <validate>required-entry</validate>
                 </field>
                 <field id="gtm_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Google Tag Manager URL</label>
+                    <comment>Optional: default is www.googletagmanager.com (make sure to exclude protocol (http(s)://)</comment>
                 </field>
                 <field id="api_secret" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Measurement API secret</label>
+                    <comment>Optional: you only need this if you enabled the event "Purchase via Measurements API".</comment>
                 </field>
                 <field id="api_measurement_id" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Measurement API - Measurement ID</label>
+                    <comment>Optional: you only need this if you enabled the event "Purchase via Measurements API".</comment>
                 </field>
                 <field id="debug_mode" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Debug mode</label>
@@ -61,7 +65,6 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <label>Purchase via Measurements API</label>
                     <comment>With this connection, you shoot purchase data from Magento to GA4. By default, this is not compliant with Google Consent Mode V2</comment>
-
                 </field>
                 <field id="begin_checkout" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
