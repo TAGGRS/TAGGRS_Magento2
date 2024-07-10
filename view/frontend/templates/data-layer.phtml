@@ -1,10 +1,12 @@
 <?php /** @var \Taggrs\DataLayer\Block\DataLayer $block */
+/** @var \Magento\Framework\Escaper $escaper */
+
 $dataLayer = $block->getDataLayer();
 ?>
 <script>
     (function () {
         document.addEventListener('DOMContentLoaded', () => {
-            const dataLayer = <?= json_encode($dataLayer); ?>;
+            const dataLayer = <?= /* @noEscape */ json_encode($dataLayer); ?>;
             taggrsPush(dataLayer, true);
         });
     })();

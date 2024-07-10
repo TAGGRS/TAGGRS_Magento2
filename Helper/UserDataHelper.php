@@ -5,6 +5,8 @@ namespace Taggrs\DataLayer\Helper;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 class UserDataHelper
@@ -23,13 +25,16 @@ class UserDataHelper
 
     public function getUserData(): array
     {
-        $email = null;
 
         if ($this->customerSession->isLoggedIn()) {
             $email = $this->customerSession->getCustomer()->getEmail();
-
-        } elseif ($quote = @$this->checkoutSession->getQuote()) {
-            $email = $quote->getBillingAddress()->getEmail();
+        } else {
+            try {
+                $quote = $this->checkoutSession->getQuote();
+                $email = $quote->getBillingAddress()->getEmail();
+            } catch ( NoSuchEntityException|LocalizedException $e ) {
+                $email = null;
+            }
         }
 
         if ($email !== null) {
@@ -38,7 +43,6 @@ class UserDataHelper
                 'email' => $email,
             ];
         }
-
 
         return [];
     }

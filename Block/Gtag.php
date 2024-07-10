@@ -3,17 +3,25 @@
 namespace Taggrs\DataLayer\Block;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Taggrs\DataLayer\Helper\QuoteDataHelper;
 
+/**
+ * Renders the Google Tag Manager loading script
+ */
 class Gtag extends Template
 {
+    /**
+     * @var QuoteDataHelper to retrieve data from current customer quote
+     */
     private QuoteDataHelper $quoteDataHelper;
 
-    private ScopeConfigInterface $scopeConfig;
-
     /**
+     * Class constructor
+     *
      * @param QuoteDataHelper $quoteDataHelper
      * @param Context $context
      * @param array $data
@@ -27,7 +35,11 @@ class Gtag extends Template
         $this->quoteDataHelper = $quoteDataHelper;
     }
 
-
+    /**
+     * Get the Google Tag Manager code
+     *
+     * @return string|null
+     */
     public function getGtmCode(): ?string
     {
         $gtmCode = $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_code');
@@ -35,6 +47,11 @@ class Gtag extends Template
         return is_string($gtmCode) ? trim($gtmCode) : null;
     }
 
+    /**
+     * Get the Google Tag Manager URL
+     *
+     * @return string
+     */
     public function getGtmUrl(): string
     {
         if ($gtmUrl = $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_url')) {
@@ -44,21 +61,45 @@ class Gtag extends Template
         return 'www.googletagmanager.com';
     }
 
+    /**
+     * Checks if the debug mode for the Data Layer push is enabled
+     *
+     * @return bool whether the debug mode is enabled
+     */
     public function isDebugMode(): bool
     {
         return (bool)$this->_scopeConfig->getValue('taggrs_datalayer/gtm/debug_mode');
     }
 
+    /**
+     * Get the current customer's quote data
+     *
+     * @return string
+     */
     public function getQuoteData(): string
     {
         return json_encode($this->quoteDataHelper->getQuoteData());
     }
 
-    public function getCurrency(): string
+    /**
+     * Get the store's currency code
+     *
+     * @return string
+     */
+    public function getCurrency(): ?string
     {
-        return $this->_storeManager->getStore()->getCurrentCurrency()->getCode();
+        try {
+            return $this->_storeManager->getStore()->getCurrentCurrency()->getCode();
+        } catch ( NoSuchEntityException|LocalizedException $e ) {
+            return null;
+        }
     }
 
+    /**
+     * Get the configuration for the events, if they are enabled or not
+     *
+     * @return string
+     */
     public function getAjaxEventsConfig(): string
     {
         return json_encode([

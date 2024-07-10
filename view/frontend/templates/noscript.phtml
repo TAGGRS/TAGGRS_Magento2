@@ -1,8 +1,12 @@
 <?php
 /** @var \Taggrs\DataLayer\Block\NoScript $block */
+/** @var \Magento\Framework\Escaper $escaper */
+
+$url = $block->getGtmUrl(); ;
+$gtmCode = $block->getGtmCode(); ;
 ?>
 <noscript>
-    <iframe src='https://<?= $block->getGtmUrl(); ?>/ns.html?id=<?= $block->getGtmCode(); ?>'
+    <iframe src='https://<?= $escaper->escapeUrl($url); ?>/ns.html?id=<?= $escaper->escapeHtmlAttr($gtmCode) ?>'
             height='0' width='0' style='display:none;visibility:hidden'>
     </iframe>
 </noscript>
