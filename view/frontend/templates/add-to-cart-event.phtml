@@ -1,16 +1,25 @@
-<?php /** @var \Magento\Framework\View\Element\Template $block */ ?>
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
 
-<script>
-    require(['jquery'], function ($) {
+<?php
+$script = <<<JS
 
-        $(document).on('ajax:addToCart', function (event, data) {
-            taggrsAjaxEvent('addtocart').then(() => {
-                taggrsReloadQuoteData();
-            });
-        });
+require(['jquery'], function ($) {
 
-        $("[data-block=\"minicart\"]").on("dropdowndialogopen", function ( e ) {
-            taggrsAjaxEvent('viewcart', () => {}, 1);
+    $(document).on('ajax:addToCart', function (event, data) {
+        taggrsAjaxEvent('addtocart').then(() => {
+            taggrsReloadQuoteData();
         });
     });
-</script>
+
+    $("[data-block=\"minicart\"]").on("dropdowndialogopen", function ( e ) {
+        taggrsAjaxEvent('viewcart', () => {}, 1);
+    });
+});
+
+JS;
+?>
+
+<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $script, false); ?>

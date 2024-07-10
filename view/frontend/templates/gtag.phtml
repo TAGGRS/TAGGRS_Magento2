@@ -1,128 +1,146 @@
 <?php
 /** @var \Taggrs\DataLayer\Block\Gtag $block */
 /** @var \Magento\Framework\Escaper $escaper */
-
-$url = $block->getGtmUrl();
-$gtmCode = $block->getGtmCode();
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<?php if (!empty($block->getGtmCode())): ?>
-    <script>
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
-            'https://<?= $escaper->escapeJs($escaper->escapeUrl($url)); ?>/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','<?= $escaper->escapeHtml($gtmCode); ?>');
-    </script>
-<?php endif; ?>
-<script>
 
-    window.taggrsQuoteData = {};
-    window.taggrsCurrency = '<?= $escaper->escapeJs($escaper->escapeHtml($block->getCurrency())) ?>';
-    window.taggersEventsConfig = <?= /* @noEscape */$block->getAjaxEventsConfig(); ?>;
+<?php
+if ( ! empty( $block->getGtmCode() ) ) {
+    $url     = $escaper->escapeJs( $escaper->escapeUrl( $block->getGtmUrl() ) );
+    $gtmCode = $escaper->escapeHtml( $block->getGtmCode() );
 
-    window.taggrsDebugMode = <?= $escaper->escapeJs($block->isDebugMode() ? 'true' : 'false') ?>;
+    $gtmTagScript = <<<JS
 
-    document.addEventListener('DOMContentLoaded', () => {
-        taggrsReloadQuoteData();
-    });
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&amp;l='+l:'';j.async=true;j.src=
+                'https://$url/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','$gtmCode');
 
-    const eventTriggeredCounter = {};
+    JS;
 
-    function taggrsReloadQuoteData() {
+    echo /* @noEscape */ $secureRenderer->renderTag( 'script', [ 'type' => 'text/javascript' ], $gtmTagScript, false );
+}
+?>
 
-        return fetch('<?= $escaper->escapeUrl($block->getUrl('taggrs-datalayer/getquotedata')) ?>')
-            .then(response => {
+<?php
+$currency     = $escaper->escapeJs( $escaper->escapeHtml( $block->getCurrency() ) );
+$eventsConfig = /* @noEscape */
+    $block->getAjaxEventsConfig();
+$debugMode    = $escaper->escapeJs( $block->isDebugMode() ? 'true' : 'false' );
+$quoteDataUrl = $escaper->escapeUrl( $block->getUrl( 'taggrs-datalayer/getquotedata' ) );
+$userDataUrl  = $escaper->escapeUrl( $block->getUrl( 'taggrs-datalayer/getuserdata' ) );
+$ajaxBaseUrl  = $escaper->escapeUrl( $block->getUrl( 'taggrs-datalayer' ) );
+?>
+
+<?php
+$helpersScript = <<<JS
+
+window.taggrsQuoteData = {};
+window.taggrsCurrency = '$currency';
+window.taggersEventsConfig = $eventsConfig;
+window.taggrsDebugMode = $debugMode;
+
+document.addEventListener('DOMContentLoaded', () => {
+    taggrsReloadQuoteData();
+});
+
+const eventTriggeredCounter = {};
+
+function taggrsReloadQuoteData() {
+
+    return fetch('$quoteDataUrl')
+        .then(response => {
             if (!response.ok) {
                 console.warn('GET request failed');
             }
             return response.json()
         })
-            .then(data => {
-                window.taggrsQuoteData = data;
-                console.log('Quote data reloaded');
-            })
+        .then(data => {
+            window.taggrsQuoteData = data;
+            console.log('Quote data reloaded');
+        })
+}
+
+function taggrsLoadUserData(callback) {
+    return fetch('$userDataUrl')
+        .then(response => {
+            if (!response.ok) {
+                console.warn('GET request failed');
+            }
+            return response.json()
+        })
+        .then(data => {
+            window.taggrsUserData = data;
+            if (typeof  callback === 'function') {
+                callback(data);
+            }
+        })
+}
+
+function taggrsPush(dataLayer, reloadUserData) {
+
+    if (!dataLayer.hasOwnProperty('ecommerce')) {
+        return;
     }
 
-    function taggrsLoadUserData(callback) {
-        return fetch('<?= $escaper->escapeUrl($block->getUrl('taggrs-datalayer/getuserdata'))  ?>')
-            .then(response => {
-                if (!response.ok) {
-                    console.warn('GET request failed');
-                }
-                return response.json()
-            })
-            .then(data => {
-                window.taggrsUserData = data;
-                if (typeof  callback === 'function') {
-                    callback(data);
-                }
-            })
+    window.dataLayer = window.dataLayer || [];
+
+    if (!dataLayer.hasOwnProperty('ecommerce')) {
+        dataLayer.ecommerce = {};
     }
 
+    const userDataEmpty = !dataLayer.ecommerce.hasOwnProperty('user_data')
+        || !dataLayer.ecommerce.user_data.hasOwnProperty('email')
 
-    function taggrsPush(dataLayer, reloadUserData) {
+    if (userDataEmpty) {
+        taggrsLoadUserData((data) => {
+            dataLayer.ecommerce.user_data = data;
+            window.dataLayer.push(dataLayer);
+            if (window.taggrsDebugMode) {
+               console.log(dataLayer);
+            }
+        });
+    } else {
+        window.dataLayer.push(dataLayer);
+        if (window.taggrsDebugMode) {
+            console.log(dataLayer);
+        }
+    }
+}
 
-        if (!dataLayer.hasOwnProperty('ecommerce')) {
+function taggrsAjaxEvent(eventName, callback, limit) {
+
+    if (typeof limit !== "undefined") {
+        if (eventTriggeredCounter.hasOwnProperty(eventName) && eventTriggeredCounter[eventName] >= limit ) {
             return;
         }
 
-        window.dataLayer = window.dataLayer || [];
-
-        if (!dataLayer.hasOwnProperty('ecommerce')) {
-            dataLayer.ecommerce = {};
-        }
-
-        const userDataEmpty = !dataLayer.ecommerce.hasOwnProperty('user_data')
-            || !dataLayer.ecommerce.user_data.hasOwnProperty('email')
-
-        if (userDataEmpty) {
-            taggrsLoadUserData((data) => {
-                dataLayer.ecommerce.user_data = data;
-                window.dataLayer.push(dataLayer);
-                if (window.taggrsDebugMode) {
-                    console.log(dataLayer);
-                }
-            });
+        if (!eventTriggeredCounter.hasOwnProperty(eventName)) {
+            eventTriggeredCounter[eventName] = 1;
         } else {
-            window.dataLayer.push(dataLayer);
-            if (window.taggrsDebugMode) {
-                console.log(dataLayer);
-            }
+            eventTriggeredCounter[eventName]++;
         }
-
-
     }
 
-    function taggrsAjaxEvent(eventName, callback, limit) {
+    const ajaxBaseUrl = '$ajaxBaseUrl';
 
-        if (typeof limit !== "undefined") {
-            if (eventTriggeredCounter.hasOwnProperty(eventName) && eventTriggeredCounter[eventName] >= limit ) {
-                return;
-            }
-
-            if (!eventTriggeredCounter.hasOwnProperty(eventName)) {
-                eventTriggeredCounter[eventName] = 1;
-            } else {
-                eventTriggeredCounter[eventName]++;
-            }
-        }
-
-        const ajaxBaseUrl = '<?= $escaper->escapeUrl($block->getUrl('taggrs-datalayer'))  ?>';
-
-        return fetch(ajaxBaseUrl + eventName)
-            .then(response => {
-                if (!response.ok) console.warn('GET request failed');
+    return fetch(ajaxBaseUrl + eventName)
+        .then(response => {
+            if (!response.ok) console.warn('GET request failed');
                 return response.json()
-            })
-            .then(data => {
-                taggrsPush(data, false);
-                if (typeof callback === 'function') {
-                    callback();
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            })
-        ;
-    }
-</script>
+        })
+        .then(data => {
+            taggrsPush(data, false);
+            if (typeof callback === 'function') {
+                callback();
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+JS;
+
+echo /* @noEscape */ $secureRenderer->renderTag( 'script', [ 'type' => 'text/javascript' ], $helpersScript, false );
+?>

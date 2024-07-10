@@ -1,13 +1,21 @@
-<?php /** @var \Taggrs\DataLayer\Block\DataLayer $block */
-/** @var \Magento\Framework\Escaper $escaper */
+<?php
+/** @var \Taggrs\DataLayer\Block\DataLayer $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 
-$dataLayer = $block->getDataLayer();
+$jsonDatalayer =  /* @noEscape */ json_encode($block->getDataLayer());
 ?>
-<script>
-    (function () {
-        document.addEventListener('DOMContentLoaded', () => {
-            const dataLayer = <?= /* @noEscape */ json_encode($dataLayer); ?>;
-            taggrsPush(dataLayer, true);
-        });
-    })();
-</script>
+
+<?php
+$script = <<<JS
+
+(function () {
+    document.addEventListener('DOMContentLoaded', () => {
+        const dataLayer = $jsonDatalayer;
+        taggrsPush(dataLayer, true);
+    });
+})();
+
+JS;
+?>
+
+<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $script, false); ?>

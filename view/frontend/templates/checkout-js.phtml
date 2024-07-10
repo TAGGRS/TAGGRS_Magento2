@@ -1,12 +1,22 @@
-<script>
+<?php
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+
+<?php
+    $script = <<<JS
+
     require([
-            'Magento_SalesRule/js/action/set-coupon-code',
-            'Magento_SalesRule/js/model/coupon',
-            'Magento_Checkout/js/model/quote'
-        ],
-        function (setCouponCode, coupon, quote) {
-            setCouponCode.registerSuccessCallback((response) => {
-                taggrsAjaxEvent('selectpromotion');
-            });
+        'Magento_SalesRule/js/action/set-coupon-code',
+        'Magento_SalesRule/js/model/coupon',
+        'Magento_Checkout/js/model/quote'
+    ],
+    function (setCouponCode, coupon, quote) {
+        setCouponCode.registerSuccessCallback((response) => {
+            taggrsAjaxEvent('selectpromotion');
         });
-</script>
+    });
+
+JS;
+?>
+
+<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $script, false); ?>
