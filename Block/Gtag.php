@@ -7,6 +7,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\ScopeInterface;
 use Taggrs\DataLayer\Helper\QuoteDataHelper;
 
 /**
@@ -42,7 +43,7 @@ class Gtag extends Template
      */
     public function getGtmCode(): ?string
     {
-        $gtmCode = $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_code');
+        $gtmCode = $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_code', ScopeInterface::SCOPE_STORE);
 
         return is_string($gtmCode) ? trim($gtmCode) : null;
     }
@@ -54,7 +55,7 @@ class Gtag extends Template
      */
     public function getGtmUrl(): string
     {
-        if ($gtmUrl = $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_url')) {
+        if ($gtmUrl = $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_url', ScopeInterface::SCOPE_STORE)) {
             return $gtmUrl;
         }
 
@@ -68,7 +69,7 @@ class Gtag extends Template
      */
     public function isDebugMode(): bool
     {
-        return (bool)$this->_scopeConfig->getValue('taggrs_datalayer/gtm/debug_mode');
+        return (bool)$this->_scopeConfig->getValue('taggrs_datalayer/gtm/debug_mode', ScopeInterface::SCOPE_STORE);
     }
 
     /**
@@ -103,7 +104,7 @@ class Gtag extends Template
     public function getAjaxEventsConfig(): string
     {
         return json_encode([
-             'remove_from_cart' => (bool)$this->_scopeConfig->getValue('taggrs_datalayer/events/remove_from_cart'),
+             'remove_from_cart' => (bool)$this->_scopeConfig->getValue('taggrs_datalayer/events/remove_from_cart', ScopeInterface::SCOPE_STORE),
         ]);
     }
 }

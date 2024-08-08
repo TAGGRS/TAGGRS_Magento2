@@ -5,6 +5,7 @@ namespace Taggrs\DataLayer\Block;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\ScopeInterface;
 use Taggrs\DataLayer\Helper\QuoteDataHelper;
 
 /**
@@ -19,7 +20,7 @@ class NoScript extends Template
      */
     public function getGtmUrl(): string
     {
-        if ($gtmUrl = $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_url')) {
+        if ($gtmUrl = $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_url', ScopeInterface::SCOPE_STORE)) {
             return $gtmUrl;
         }
 
@@ -33,7 +34,7 @@ class NoScript extends Template
      */
     public function getGtmCode(): ?string
     {
-        $gtmCode = $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_code');
+        $gtmCode = $this->_scopeConfig->getValue('taggrs_datalayer/gtm/gtm_code', ScopeInterface::SCOPE_STORE);
 
         return is_string($gtmCode) ? trim($gtmCode) : null;
     }
