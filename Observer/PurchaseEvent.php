@@ -117,11 +117,14 @@ class PurchaseEvent implements ObserverInterface
 
     private function getUserData(): array
     {
+
         $userData = $this->userDataHelper->getUserData();
 
         $order = $this->checkoutSession->getLastRealOrder();
 
-        $billingAddress = $order->getBillingAddress();
+
+        $shippingAddress = $order->getShippingAddress();
+        $billingAddress = $shippingAddress;
 
         $userData['email'] = $billingAddress->getEmail();
         $userData['email_hashed'] = hash('sha256', $billingAddress->getEmail());
