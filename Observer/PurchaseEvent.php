@@ -60,7 +60,7 @@ class PurchaseEvent implements ObserverInterface
 
         $eventEnabled = $this->config->getValue('taggrs_datalayer/events/purchase_via_measurement_api');
 
-        $logger->critical("Purchase event enabled: " . $eventEnabled);
+        // $logger->critical("Purchase event enabled: " . $eventEnabled);
 
         if (!$eventEnabled) {
             return;
@@ -100,7 +100,7 @@ class PurchaseEvent implements ObserverInterface
         $jsonBody = json_encode($body);
         $jsonBody = strtr($jsonBody, [':[]' => ':{}']);
 
-        $logger->critical($jsonBody);
+        // $logger->critical($jsonBody);
 
         $res = $this->client->request('POST', $url, [
             'headers' => [
@@ -109,7 +109,7 @@ class PurchaseEvent implements ObserverInterface
             'body' => $jsonBody,
         ]);
 
-        $logger->critical($res->getStatusCode());
+        // $logger->critical($res->getStatusCode());
 
 
         // TODO: Implement execute() method.
