@@ -37,10 +37,8 @@ abstract class AbstractDataLayerController extends DataLayer implements HttpGetA
     public function execute(): ResultInterface
     {
         $resultJson = $this->resultFactory->create();
-//        $dataLayer = $this->getDataLayer();
 
         $resultJson->setData($this->getDataLayer());
-//        ObjectManager::getInstance()->get(LoggerInterface::class)->critical(print_r($dataLayer, true));
 
         return $resultJson;
     }

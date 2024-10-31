@@ -52,8 +52,6 @@ class RemoveFromCart implements DataLayerInterface
     public function beforeExecute(Delete $subject)
     {
         $request = $subject->getRequest();
-        ObjectManager::getInstance()->get(LoggerInterface::class)->critical(print_r($request->getParams(), true));
-
         $quoteItemId = $request->getParam('id');
 
         if ($quoteItemId !== null) {

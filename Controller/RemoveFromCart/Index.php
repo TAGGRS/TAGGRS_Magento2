@@ -37,7 +37,6 @@ class Index extends AbstractDataLayerController
     public function getEcommerce(): array
     {
         $quoteItemId = $this->context->getRequest()->getParam('id');
-        ObjectManager::getInstance()->get(LoggerInterface::class)->critical('quote item id remove: ' . $quoteItemId);
         $quote = $this->checkoutSession->getQuote();
 
         $ecommerce = [

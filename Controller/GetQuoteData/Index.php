@@ -27,7 +27,6 @@ class Index implements HttpGetActionInterface
     public function execute()
     {
         $quoteData = $this->quoteDataHelper->getQuoteData();
-        ObjectManager::getInstance()->get(LoggerInterface::class)->critical(print_r($quoteData, true));
         $result = $this->jsonFactory->create();
         $result->setData($quoteData);
         return  $result;
