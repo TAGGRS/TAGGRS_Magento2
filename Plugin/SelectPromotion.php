@@ -35,15 +35,14 @@ class SelectPromotion implements DataLayerInterface
     public function afterExecute(CouponPost $subject, Redirect $result)
     {
         $request = $subject->getRequest();
+        $code = $request->getParam('coupon_code');
 
-        if ($request->getParam('remove') == 0 && $request->getParam('coupon_code') !== null) {
-
-            $coupon = $this->quoteDataHelper->getCouponByCode($request->getParam('coupon_code'));
-            $this->couponCode = $coupon->getCode();
+        if ($request->getParam('remove') == 0 && $code !== null) {
+            $coupon = $this->quoteDataHelper->getCouponByCode($code);
+            $this->couponCode = $code;
             $this->couponId = $coupon->getId();
             $dataLayer = $this->getDataLayer();
             $this->session->setDataLayer($dataLayer);
-
         }
 
         return $result;
