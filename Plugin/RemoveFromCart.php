@@ -7,7 +7,6 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Api\CartItemRepositoryInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
-use Magento\Quote\Model\Cart\Data\CartItem;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 use Taggrs\DataLayer\Api\DataLayerInterface;

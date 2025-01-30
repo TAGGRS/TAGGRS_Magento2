@@ -10,9 +10,9 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
-use Taggrs\DataLayer\Event\Purchase;
 use Taggrs\DataLayer\Helper\ProductViewDataHelper;
 use Taggrs\DataLayer\Helper\UserDataHelper;
 
@@ -32,6 +32,8 @@ class PurchaseEvent implements ObserverInterface
 
     private Session $checkoutSession;
 
+    private OrderRepositoryInterface $orderRepository;
+
     /**
      * @param ScopeConfigInterface $config
      * @param CookieManagerInterface $cookieManager
@@ -42,6 +44,7 @@ class PurchaseEvent implements ObserverInterface
         UserDataHelper $userDataHelper,
         ProductViewDataHelper $productViewDataHelper,
         StoreManagerInterface $storeManager,
+        OrderRepositoryInterface $orderRepository,
         Client $client,
         Session $checkoutSession
     ) {
@@ -52,6 +55,7 @@ class PurchaseEvent implements ObserverInterface
         $this->client         = $client;
         $this->storeManager = $storeManager;
         $this->checkoutSession = $checkoutSession;
+        $this->orderRepository = $orderRepository;
     }
 
     public function execute(Observer $observer)
@@ -88,7 +92,7 @@ class PurchaseEvent implements ObserverInterface
                             'shipping' => (float)$order->getShippingAmount(),
 //                            'coupon' => $order->getCouponCode(),
                             'items' => $this->productViewDataHelper->getItemsFromOrder($order),
-                            'user_data' => $this->getUserData()
+                            'user_data' => $this->getUserData($order)
                         ]
                     ]
                 ]
@@ -107,13 +111,10 @@ class PurchaseEvent implements ObserverInterface
 
     }
 
-    private function getUserData(): array
+    private function getUserData(OrderInterface $order): array
     {
 
         $userData = $this->userDataHelper->getUserData();
-
-        $order = $this->checkoutSession->getLastRealOrder();
-
 
         $shippingAddress = $order->getShippingAddress();
         $billingAddress = $shippingAddress;
