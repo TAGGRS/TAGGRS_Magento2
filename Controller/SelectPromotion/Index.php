@@ -13,7 +13,6 @@ class Index extends AbstractDataLayerController
 {
     private QuoteDataHelper $quoteDataHelper;
 
-
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
