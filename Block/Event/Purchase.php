@@ -94,19 +94,24 @@ class Purchase extends DataLayer
         $order = $this->checkoutSession->getLastRealOrder();
         $billingAddress = $order->getBillingAddress();
 
-        $userData['email'] = $billingAddress->getEmail();
-        $userData['email_hashed'] = hash('sha256', $billingAddress->getEmail());
+        if ($email = $billingAddress->getEmail()) {
+            $userData['email'] = $email;
+            $userData['email_hashed'] = hash('sha256', $email);
+        }
 
-        $userData['phone'] = $billingAddress->getTelephone();
-        $userData['phone_hashed'] = hash('sha256', $billingAddress->getTelephone());
+        if ($phone = $billingAddress->getTelephone()) {
+            $userData['phone'] = $phone;
+            $userData['phone_hashed'] = hash('sha256', $phone);
+        }
 
         $address = [];
 
         $address['first_name'] = $billingAddress->getFirstname();
         $address['last_name'] = $billingAddress->getLastname();
-        $street = $billingAddress->getStreet();
 
-        $address['street'] = implode(' ', $street);
+        if ($street = $billingAddress->getStreet()) {
+            $address['street'] = implode(' ', $street);
+        }
 
         $address['city'] = $billingAddress->getCity();
         $address['postcode'] = $billingAddress->getPostcode();
