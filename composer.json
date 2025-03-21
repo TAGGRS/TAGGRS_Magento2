@@ -1,6 +1,6 @@
 {
     "name": "taggrs/magento2-data-layer",
-    "version": "v1.0.11",
+    "version": "v1.0.12",
     "description": "This extension collect eccommerce data from Magento 2 and pushes it to the Google Tag Manager DataLayer.",
     "type": "magento2-module",
     "license": [
