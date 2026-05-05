@@ -8,13 +8,21 @@ $script = <<<JS
 
 require(['jquery'], function ($) {
 
+    const shouldLoadQuoteData = window.taggersEventsConfig
+        && window.taggersEventsConfig.remove_from_cart === true;
+
     $(document).on('ajax:addToCart', function (event, data) {
         taggrsAjaxEvent('addtocart').then(() => {
-            taggrsReloadQuoteData();
+            if (shouldLoadQuoteData) {
+                taggrsReloadQuoteData();
+            }
         });
     });
 
     $("[data-block=\"minicart\"]").on("dropdowndialogopen", function ( e ) {
+        if (shouldLoadQuoteData) {
+            taggrsReloadQuoteData();
+        }
         taggrsAjaxEvent('viewcart', () => {}, 1);
     });
 });

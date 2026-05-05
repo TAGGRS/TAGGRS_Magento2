@@ -5,7 +5,8 @@
 ?>
 
 <?php
-if ( ! empty( $block->getGtmCode() ) ) {
+if ( ! empty( $block->getGtmCode() ) ): ?>
+<?php
     $url     = $escaper->escapeJs( $escaper->escapeUrl( $block->getGtmUrl() ) );
     $gtmCode = $escaper->escapeHtml( $block->getGtmCode() );
 
@@ -18,10 +19,10 @@ if ( ! empty( $block->getGtmCode() ) ) {
     })(window,document,'script','dataLayer','$gtmCode');
 
     JS;
-
-    echo /* @noEscape */ $secureRenderer->renderTag( 'script', [ 'type' => 'text/javascript' ], $gtmTagScript, false );
-}
 ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag( 'script', [ 'type' => 'text/javascript' ], $gtmTagScript, false ); ?>
+
+<?php endif; ?>
 
 <?php
 $currency     = $escaper->escapeJs( $escaper->escapeHtml( $block->getCurrency() ) );
@@ -40,10 +41,6 @@ window.taggrsQuoteData = {};
 window.taggrsCurrency = '$currency';
 window.taggersEventsConfig = $eventsConfig;
 window.taggrsDebugMode = $debugMode;
-
-document.addEventListener('DOMContentLoaded', () => {
-    taggrsReloadQuoteData();
-});
 
 const eventTriggeredCounter = {};
 
@@ -141,6 +138,5 @@ function taggrsAjaxEvent(eventName, callback, limit) {
         });
 }
 JS;
-
-echo /* @noEscape */ $secureRenderer->renderTag( 'script', [ 'type' => 'text/javascript' ], $helpersScript, false );
 ?>
+<?= /* @noEscape */ $secureRenderer->renderTag( 'script', [ 'type' => 'text/javascript' ], $helpersScript, false ); ?>
