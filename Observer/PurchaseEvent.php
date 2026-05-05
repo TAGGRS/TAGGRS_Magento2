@@ -79,7 +79,7 @@ class PurchaseEvent implements ObserverInterface
         $order = $observer->getEvent()->getOrder();
 
         $body = [
-            'client_id' => $this->cookieManager->getCookie('_ga'),
+            'client_id' => $this->getClientId(),
             'events' => [
                 [
                     'name' => 'purchase',
@@ -109,6 +109,16 @@ class PurchaseEvent implements ObserverInterface
             'body' => $jsonBody,
         ]);
 
+    }
+
+    private function getClientId(): ?string
+    {
+        $fpid = $this->cookieManager->getCookie('FPID');
+        if (!empty($fpid)) {
+            return $fpid;
+        }
+
+        return $this->cookieManager->getCookie('_ga');
     }
 
     private function getUserData(OrderInterface $order): array
