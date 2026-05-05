@@ -33,7 +33,7 @@ class Index extends AbstractDataLayerController
 
     public function getEcommerce(): array
     {
-        $total = $this->quoteDataHelper->getQuote()->getGrandTotal();
+        $total = (float)$this->quoteDataHelper->getQuote()->getGrandTotal();
 
         return [
             'currency' => $this->getCurrency(),
