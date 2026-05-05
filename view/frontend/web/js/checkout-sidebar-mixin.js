@@ -12,7 +12,11 @@ define([
                 }
 
                 const quoteItemId = $(elem).data('cart-item');
-                if (window.taggrsQuoteData.hasOwnProperty(quoteItemId)) {
+                const pushRemoveFromCart = function () {
+                    if (!window.taggrsQuoteData.hasOwnProperty(quoteItemId)) {
+                        return;
+                    }
+
                     const quoteItem = window.taggrsQuoteData[quoteItemId];
                     const dataLayer = {event: 'remove_from_cart'};
                     dataLayer.ecommerce = {
@@ -21,6 +25,14 @@ define([
                         items: [quoteItem]
                     };
                     taggrsPush(dataLayer, true);
+                };
+
+                if (window.taggrsQuoteData.hasOwnProperty(quoteItemId)) {
+                    pushRemoveFromCart();
+                } else if (typeof taggrsReloadQuoteData === 'function') {
+                    taggrsReloadQuoteData().then(function () {
+                        pushRemoveFromCart();
+                    });
                 }
 
                 return this._super(elem);
