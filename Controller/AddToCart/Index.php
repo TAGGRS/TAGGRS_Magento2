@@ -4,8 +4,10 @@ namespace Taggrs\DataLayer\Controller\AddToCart;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Session;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
@@ -22,6 +24,8 @@ class Index extends AbstractDataLayerController
 
     private ProductRepositoryInterface $productRepository;
 
+    private CustomerSession $customerSession;
+
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
@@ -29,13 +33,22 @@ class Index extends AbstractDataLayerController
         UserDataHelper $userDataHelper,
         StoreManagerInterface $storeManager,
         QuoteDataHelper $quoteDataHelper,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        CustomerSession $customerSession
     ) {
         parent::__construct($context, $resultJsonFactory, $userDataHelper, $storeManager);
 
         $this->checkoutSession = $checkoutSession;
         $this->quoteDataHelper = $quoteDataHelper;
         $this->productRepository = $productRepository;
+        $this->customerSession = $customerSession;
+    }
+
+    public function execute(): ResultInterface
+    {
+        $result = parent::execute();
+        $this->customerSession->unsDataLayer();
+        return $result;
     }
 
     public function getEvent(): string

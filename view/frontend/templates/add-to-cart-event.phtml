@@ -1,6 +1,8 @@
 <?php
 /** @var \Magento\Framework\View\Element\Template $block */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
+$sessionDataLayerUrl = $block->getUrl('taggrs-datalayer/getsessiondatalayer');
 ?>
 
 <?php
@@ -26,6 +28,33 @@ require(['jquery'], function ($) {
         taggrsAjaxEvent('viewcart', () => {}, 1);
     });
 });
+
+// Ophalen sessiedata op pageload na non-AJAX add_to_cart (redirect flow)
+(function () {
+    const getDataLayerUrl = '$sessionDataLayerUrl';
+
+    function taggrsGetCookie(name) {
+        const m = document.cookie.match(
+            new RegExp('(?:^|; )' + name.replace(/[-[\]{}()*+?.,\\\\^\$|#\s]/g, '\\\\$&') + '=([^;]*)')
+        );
+        return m ? decodeURIComponent(m[1]) : null;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        if (taggrsGetCookie('taggrs_dl_pending') !== '1') {
+            return;
+        }
+
+        fetch(getDataLayerUrl, { credentials: 'same-origin' })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data !== null) {
+                    taggrsPush(data, false);
+                }
+            })
+            .catch(function (e) { console.warn(e); });
+    });
+})();
 
 JS;
 ?>
