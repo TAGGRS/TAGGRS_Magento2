@@ -126,27 +126,37 @@ class PurchaseEvent implements ObserverInterface
 
         $userData = $this->userDataHelper->getUserData();
 
+        $billingAddress = $order->getBillingAddress();
         $shippingAddress = $order->getShippingAddress();
-        $billingAddress = $shippingAddress;
+        $addressSource = $billingAddress ?: $shippingAddress;
 
-        $userData['email'] = $billingAddress->getEmail();
-        $userData['email_hashed'] = hash('sha256', $billingAddress->getEmail());
+        if ($addressSource === null) {
+            return $userData;
+        }
 
+        $email = (string)$addressSource->getEmail();
+        if ($email !== '') {
+            $userData['email'] = $email;
+            $userData['email_hashed'] = hash('sha256', $email);
+        }
 
-        $userData['phone'] = $billingAddress->getTelephone();
-        $userData['phone_hashed'] = hash('sha256', $billingAddress->getTelephone());
+        $phone = (string)$addressSource->getTelephone();
+        if ($phone !== '') {
+            $userData['phone'] = $phone;
+            $userData['phone_hashed'] = hash('sha256', $phone);
+        }
 
         $address = [];
 
-        $address['first_name'] = $billingAddress->getFirstname();
-        $address['last_name'] = $billingAddress->getLastname();
-        $street = $billingAddress->getStreet();
+        $address['first_name'] = $addressSource->getFirstname();
+        $address['last_name'] = $addressSource->getLastname();
+        $street = $addressSource->getStreet();
 
-        $address['street'] = implode(' ', $street);
+        $address['street'] = is_array($street) ? implode(' ', $street) : (string)$street;
 
-        $address['city'] = $billingAddress->getCity();
-        $address['postcode'] = $billingAddress->getPostcode();
-        $address['country'] = $billingAddress->getCountryId();
+        $address['city'] = $addressSource->getCity();
+        $address['postcode'] = $addressSource->getPostcode();
+        $address['country'] = $addressSource->getCountryId();
 
         $userData['address'] = $address;
 
