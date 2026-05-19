@@ -154,6 +154,9 @@ class QuoteDataHelper extends AbstractHelper
 
     public function getItemsFromQuote(bool $includeDiscount = false, bool $includeCouponCode = false): array
     {
+        if (!$this->checkoutSession->getQuoteId()) {
+            return [];
+        }
         $quote = $this->checkoutSession->getQuote();
         $quoteItems = $quote->getAllVisibleItems();
 
@@ -193,6 +196,9 @@ class QuoteDataHelper extends AbstractHelper
 
     public function getQuoteData(): array
     {
+        if (!$this->checkoutSession->getQuoteId()) {
+            return [];
+        }
         try {
             $quote = $this->checkoutSession->getQuote();
             $categoryMap = $this->preloadCategoryMapFromQuote($quote);
