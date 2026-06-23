@@ -52,7 +52,7 @@ class Index extends AbstractDataLayerController
             if ($quoteItem->getId() == $quoteItemId) {
                 $ecommerce['value'] = floatval($quoteItem->getPriceInclTax()) * $quoteItem->getQty();
                 $item = [];
-                $item['item_id'] = $quoteItem->getProduct()->getId();
+                $item['item_id'] = $quoteItem->getSku();
                 $item['item_name'] = $quoteItem->getProduct()->getName();
                 $item['price'] = floatval($quoteItem->getPriceInclTax());
                 $item['quantity'] = $quoteItem->getQty();

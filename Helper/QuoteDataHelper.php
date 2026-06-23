@@ -143,7 +143,7 @@ class QuoteDataHelper extends AbstractHelper
     public function getItemByProduct(ProductInterface $product): array
     {
         $item = [
-            'item_id' => $product->getId(),
+            'item_id' => $product->getSku(),
             'item_name' => $product->getName(),
             'price' => $product->getTypeId() !== 'configurable' ? $product->getPrice() : $product->getFinalPrice(),
         ];

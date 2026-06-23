@@ -7,7 +7,7 @@
 <?php
 if ( ! empty( $block->getGtmCode() ) ): ?>
 <?php
-    $url     = $escaper->escapeJs( $escaper->escapeUrl( $block->getGtmUrl() ) );
+    $url     = $escaper->escapeUrl( $block->getGtmUrl() );
     $gtmCode = $escaper->escapeHtml( $block->getGtmCode() );
 
     $gtmTagScript = <<<JS

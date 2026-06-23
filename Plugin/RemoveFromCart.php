@@ -81,7 +81,7 @@ class RemoveFromCart implements DataLayerInterface
             $ecommerce['value'] = floatval($this->removedItem->getPriceInclTax()) * $this->removedItem->getQty();
 
             $item = [
-                'item_id' => $this->removedItem->getProduct()->getId(),
+                'item_id' => $this->removedItem->getSku(),
                 'item_name' => $this->removedItem->getProduct()->getName(),
                 'quantity' => $this->removedItem->getQty(),
                 'price' => floatval($this->removedItem->getPriceInclTax()),
