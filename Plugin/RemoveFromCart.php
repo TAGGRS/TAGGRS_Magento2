@@ -53,8 +53,11 @@ class RemoveFromCart implements DataLayerInterface
         $request = $subject->getRequest();
         $quoteItemId = $request->getParam('id');
 
-        if ($quoteItemId !== null) {
-            foreach ($this->checkoutSession->getQuote()->getItems() as $quoteItem) {
+        $quote = $this->checkoutSession->getQuote();
+        $items = $quote ? $quote->getItems() : [];
+        
+        if (!empty($items)) {
+            foreach ($items as $quoteItem) {
                 if ($quoteItemId == $quoteItem->getItemId()) {
                     $this->removedItem = $quoteItem;
                     break;
