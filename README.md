@@ -10,9 +10,13 @@ Install the extension via composer.
 ```bash
 composer require taggrs/magento2-data-layer
 ```
-Enable module and perform database upgrade.
+Enable module
 ```bash
-bin/magento setup:upgrage
+php bin/magento module:enable Taggrs_DataLayer
+```
+Perform database upgrade.
+```bash
+bin/magento setup:upgrade
 ```
 Perform dependency-injection compilation.
 ```bash
