@@ -26,6 +26,11 @@ class SearchResultsViewItemList extends DataLayer
     private ProductViewDataHelper $productHelper;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    private CategoryRepositoryInterface $categoryRepository;
+
+    /**
      * Class constructor
      *
      * @param RequestInterface $request
