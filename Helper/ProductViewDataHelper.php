@@ -6,7 +6,6 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\ListProduct;
-use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Sales\Api\Data\OrderInterface;
 
@@ -19,7 +18,6 @@ class ProductViewDataHelper extends AbstractHelper
 
     public function __construct(
         ListProduct $listProduct,
-        CheckoutSession $checkoutSession,
         ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository
     ) {
